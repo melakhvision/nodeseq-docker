@@ -1,0 +1,38 @@
+version: '3'
+volumes:
+  mariadb_back:
+    driver: local
+networks:
+    nodebackend:
+        driver: bridge
+services:
+  backend:
+    build: ./
+    image: nodenbackend
+    ports:
+      - 80:80
+    restart: always
+    environment:
+      - DATABASE_NAME=seqdb
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=winkerdev630
+      - DATABASE_HOST=mariadb
+    networks:
+      nodebackend:
+
+  mariadb:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=winkerdev630
+      - MYSQL_USER=root 
+      - MYSQL_PASSWORD=winkerdev630
+      - MYSQL_DATABASE=seqdb
+    expose:
+        - "3306"
+    ports:
+        - "3306:3306"
+    volumes:
+     - mariadb_back:/var/lib/mysql
+    networks:
+      nodebackend:
