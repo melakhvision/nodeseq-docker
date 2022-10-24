@@ -27,8 +27,12 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  if (id == null) {
+    res.json({ message: " You haven't given any id" });
+  }
   try {
-    const user = await User.findOne({ where: { id: req.params.id } });
+    const user = await User.findOne({ where: { id: id } });
     user == null
       ? res.json({ message: "No user has been found" }).status(404)
       : res.json(user);
